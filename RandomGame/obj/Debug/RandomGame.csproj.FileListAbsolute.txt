@@ -1,0 +1,11 @@
+D:\SharpProjects\RandomGame\RandomGame\bin\Debug\RandomGame.exe.config
+D:\SharpProjects\RandomGame\RandomGame\bin\Debug\RandomGame.exe
+D:\SharpProjects\RandomGame\RandomGame\bin\Debug\RandomGame.pdb
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.csproj.AssemblyReference.cache
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.csproj.SuggestedBindingRedirects.cache
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.Form1.resources
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.Properties.Resources.resources
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.csproj.GenerateResource.cache
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.csproj.CoreCompileInputs.cache
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.exe
+D:\SharpProjects\RandomGame\RandomGame\obj\Debug\RandomGame.pdb
