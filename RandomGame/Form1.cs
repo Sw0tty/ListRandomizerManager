@@ -14,7 +14,10 @@ using ClosedXML.Excel;
 using System.Runtime.InteropServices.ComTypes;
 using DocumentFormat.OpenXml.Spreadsheet;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-
+using System.Threading;
+using DocumentFormat.OpenXml.Drawing;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RandomGame
 {
@@ -23,24 +26,40 @@ namespace RandomGame
         public Form1()
         {
             InitializeComponent();
+            LoadJson();
 
             StringCollection collection = Properties.Settings.Default.listBoxValues;
+            StringDictionary dict = Properties.Settings.Default.myDict;
+            //Dictionary<string, List<string>> d = Properties.Settings.Default.dictionaryValues;
 
-            if (collection != null)
+
+            //MessageBox.Show(collection.Count.ToString());
+
+            //MessageBox.Show(d.Count.ToString());
+
+            comboBox1.SelectedItem = "films";
+
+
+
+
+            /*if (collection != null)
             {
                 foreach (var item in collection)
                 {
                     listBox1.Items.Add(item);
                 }
-            }
+            }*/
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (listBox1.Items.Count != 0)
             {
-                Random rnd = new Random();
-                label1.Text = listBox1.Items[rnd.Next(0, listBox1.Items.Count)].ToString();
+                if (!backgroundWorker1.IsBusy)
+                {
+                    button1.Enabled = false;
+                    backgroundWorker1.RunWorkerAsync();
+                }
             }
             else
             {
@@ -50,6 +69,23 @@ namespace RandomGame
 
         private void button2_Click(object sender, EventArgs e)
         {
+            string newValue = textBox1.Text.Trim(' ');
+
+
+            if (newValue != "")
+            {
+                if (JSONWorker.DataFromFile.ContainsKey(newValue))
+                {
+                    MessageBox.Show("Значение уже сущетсвует");
+                }
+                else
+                {
+                    listBox1.Items.Add(newValue);
+
+                    JSONWorker.AddValue(comboBox1.SelectedItem.ToString(), newValue);
+                }
+            }
+/*
             string gameName = textBox1.Text;
             if (gameName != "")
             {
@@ -73,7 +109,7 @@ namespace RandomGame
                     listBox1.Items.Add(gameName);
                     saveListBox();
                 }
-            }
+            }*/
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -88,6 +124,8 @@ namespace RandomGame
                 MessageBox.Show("Ничего не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        
 
         public void saveListBox()
         {
@@ -155,6 +193,125 @@ namespace RandomGame
                 saveListBox();
                 MessageBox.Show($"Добавлено {count} записей.");
             }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            for (int i = 1; i < 35; i++)
+            {
+                Random rnd = new Random();
+                worker.ReportProgress(rnd.Next(0, listBox1.Items.Count));
+                
+                Thread.Sleep(10 * i);
+            }
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            label1.Text = listBox1.Items[e.ProgressPercentage].ToString();
+            if (label1.Text == "PAYDAY 2")
+            {
+                MessageBox.Show("");
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string newCategory = textBox2.Text.Trim(' ');
+            if (newCategory != "")
+            {
+                if (JSONWorker.DataFromFile.ContainsKey(newCategory))
+                {
+                    MessageBox.Show("Категория уже сущетсвует");
+                }
+                else
+                {
+                    comboBox1.Items.Add(newCategory);
+                    
+                    JSONWorker.AddCategory(listBox1, comboBox1, newCategory);
+                }
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (textBox2.Text.Trim(' ') != "")
+            {
+                listBox2.Items.Add(textBox2.Text.Trim(' '));
+
+            }
+        }
+
+
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            LoadJson();
+           /* List<CategoryValues> categoryValues = new List<CategoryValues>();
+
+            categoryValues.Add(new CategoryValues() { CategoryName = "games", ValuesCat = new List<string>() { "mine", "some" } });
+            categoryValues.Add(new CategoryValues() { CategoryName = "films", ValuesCat = new List<string>() { "mila", "dada" } });
+
+            string json = JsonSerializer.Serialize(categoryValues);
+
+            File.WriteAllText(@"D:\customers.json", json);*/
+        }
+        public void LoadJson()
+        {
+            using (StreamReader r = new StreamReader(@"D:\customers.json"))
+            {
+                string json = r.ReadToEnd();
+                List<CategoryValues> items = JsonSerializer.Deserialize<List<CategoryValues>>(json);
+                Dictionary<string, List<string>> newDict = new Dictionary<string, List<string>>();
+
+                foreach (CategoryValues item in items)
+                {
+                    comboBox1.Items.Add(item.CategoryName);
+                    
+                    newDict[item.CategoryName] = new List<string>();
+                    foreach (string value in item.ValuesCat)
+                    {
+                        newDict[item.CategoryName].Add(value);
+                    }
+                    //comboBox1.SelectedItem = item.CategoryName;
+                }
+                JSONWorker.DataFromFile = newDict;
+                //JSONData.LoadCategoryData(listBox2, comboBox1);
+            }
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            JSONWorker.LoadCategoryData(listBox1, comboBox1);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            List<CategoryValues> categoryValues = new List<CategoryValues>();
+
+            foreach (string category in JSONWorker.DataFromFile.Keys)
+            {
+                List<string> catValues = new List<string>();
+                foreach (string value in JSONWorker.DataFromFile[category])
+                {
+                    catValues.Add(value);
+                }
+                categoryValues.Add(new CategoryValues() { CategoryName = category, ValuesCat = catValues });
+            }
+
+            
+            //new CategoryValues() { CategoryName = "films", ValuesCat = new List<string>() { "mila", "dada" } };
+
+            string json = JsonSerializer.Serialize(categoryValues);
+
+            File.WriteAllText(@"D:\customers.json", json);
         }
     }
 }
