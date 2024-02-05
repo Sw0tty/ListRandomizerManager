@@ -33,7 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.valueBox = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -59,10 +59,11 @@
             this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(283, 57);
+            this.listBox1.Location = new System.Drawing.Point(283, 77);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(243, 384);
+            this.listBox1.Size = new System.Drawing.Size(243, 364);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedValueChanged += new System.EventHandler(this.listBox1_SelectedValueChanged);
             // 
             // button1
             // 
@@ -102,6 +103,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Enabled = false;
             this.button3.Location = new System.Drawing.Point(283, 453);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(243, 40);
@@ -110,17 +112,17 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // textBox1
+            // valueBox
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(6, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(253, 26);
-            this.textBox1.TabIndex = 5;
+            this.valueBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.valueBox.Location = new System.Drawing.Point(6, 19);
+            this.valueBox.Name = "valueBox";
+            this.valueBox.Size = new System.Drawing.Size(253, 26);
+            this.valueBox.TabIndex = 5;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(13, 9);
+            this.button4.Location = new System.Drawing.Point(13, 12);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(124, 28);
             this.button4.TabIndex = 8;
@@ -130,9 +132,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(143, 9);
+            this.button5.Location = new System.Drawing.Point(143, 12);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(109, 28);
+            this.button5.Size = new System.Drawing.Size(134, 28);
             this.button5.TabIndex = 9;
             this.button5.Text = "Import from Excel";
             this.button5.UseVisualStyleBackColor = true;
@@ -150,9 +152,9 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(265, 12);
+            this.comboBox1.Location = new System.Drawing.Point(283, 12);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(232, 28);
+            this.comboBox1.Size = new System.Drawing.Size(243, 28);
             this.comboBox1.TabIndex = 10;
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
@@ -164,9 +166,9 @@
             this.listBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listBox2.FormattingEnabled = true;
             this.listBox2.ItemHeight = 20;
-            this.listBox2.Location = new System.Drawing.Point(13, 43);
+            this.listBox2.Location = new System.Drawing.Point(12, 55);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(203, 84);
+            this.listBox2.Size = new System.Drawing.Size(203, 64);
             this.listBox2.TabIndex = 11;
             // 
             // button6
@@ -191,7 +193,7 @@
             // button7
             // 
             this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button7.Location = new System.Drawing.Point(138, 133);
+            this.button7.Location = new System.Drawing.Point(168, 135);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(109, 23);
             this.button7.TabIndex = 14;
@@ -201,18 +203,19 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(13, 128);
+            this.button8.Enabled = false;
+            this.button8.Location = new System.Drawing.Point(283, 46);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(119, 33);
+            this.button8.Size = new System.Drawing.Size(243, 25);
             this.button8.TabIndex = 15;
-            this.button8.Text = "button8";
+            this.button8.Text = "Удалить категорию";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.valueBox);
             this.groupBox1.Location = new System.Drawing.Point(12, 394);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(265, 99);
@@ -278,7 +281,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox valueBox;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Windows.Forms;
-
+using System.IO;
 
 namespace RandomGame
 {
@@ -17,7 +17,32 @@ namespace RandomGame
 
     public static class JSONWorker
     {
+        public static string CollectionFileName = "CollectionOfValues.json";
         public static Dictionary<string, List<string>> DataFromFile = new Dictionary<string, List<string>>();
+
+        public static void CreateCollectionFile()
+        {
+            File.Create(AppDomain.CurrentDomain.BaseDirectory + CollectionFileName).Close();
+        }
+
+        public static void SaveCollectionFile()
+        {
+            List<CategoryValues> categoryValues = new List<CategoryValues>();
+
+            foreach (string category in DataFromFile.Keys)
+            {
+                List<string> catValues = new List<string>();
+                foreach (string value in DataFromFile[category])
+                {
+                    catValues.Add(value);
+                }
+                categoryValues.Add(new CategoryValues() { CategoryName = category, ValuesCat = catValues });
+            }
+
+            string json = JsonSerializer.Serialize(categoryValues);
+
+            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + CollectionFileName, json);
+        }
 
         public static void LoadCategoryData(ListBox listBox, ComboBox comboBox)
         {
@@ -31,6 +56,7 @@ namespace RandomGame
         public static void AddCategory(ListBox listBox, ComboBox comboBox, string newCategory)
         {
             listBox.Items.Clear();
+            comboBox.Items.Add(newCategory);
             DataFromFile[newCategory] = new List<string>();
             comboBox.SelectedItem = newCategory;
         }
@@ -38,6 +64,16 @@ namespace RandomGame
         public static void AddValue(string category, string newValue)
         {
             DataFromFile[category].Add(newValue);
+        }
+
+        public static void DeleteValue(string category, string value)
+        {
+            DataFromFile[category].Remove(value);
+        }
+
+        public static void DeleteCategory(string category)
+        {
+            DataFromFile.Remove(category);
         }
     }
 }

@@ -11,5 +11,8 @@
     <Setting Name="myDict" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="lastSelectedCategory" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
