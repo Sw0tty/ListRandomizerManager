@@ -2,15 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RandomGame.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="listBoxValues" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="dictionaryValues" Type="System.Collections.Specialized.NameValueCollection" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="myDict" Type="System.Collections.Specialized.StringDictionary" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="lastSelectedCategory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

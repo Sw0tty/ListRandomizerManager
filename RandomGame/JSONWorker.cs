@@ -66,6 +66,18 @@ namespace RandomGame
             DataFromFile[category].Add(newValue);
         }
 
+        public static void UpdateValue(string category, string oldValue, string newValue)
+        {
+            foreach (string value in DataFromFile[category])
+            {
+                if (value == oldValue)
+                {
+                    DataFromFile[category][DataFromFile[category].IndexOf(oldValue)] = newValue;
+                    break;
+                }
+            }
+        }
+
         public static void DeleteValue(string category, string value)
         {
             DataFromFile[category].Remove(value);
