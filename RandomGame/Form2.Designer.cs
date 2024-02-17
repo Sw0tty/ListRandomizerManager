@@ -35,13 +35,15 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(103, 72);
+            this.button1.Location = new System.Drawing.Point(61, 72);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Сохранить";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.MouseEnter += new System.EventHandler(this.button1_MouseEnter);
+            this.button1.MouseLeave += new System.EventHandler(this.button1_MouseLeave);
             // 
             // textBox1
             // 
@@ -53,13 +55,15 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(203, 72);
+            this.button2.Location = new System.Drawing.Point(161, 72);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(94, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "Отмена";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.MouseEnter += new System.EventHandler(this.button2_MouseEnter);
+            this.button2.MouseLeave += new System.EventHandler(this.button2_MouseLeave);
             // 
             // Form2
             // 

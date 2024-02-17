@@ -1,24 +1,36 @@
 ﻿using System;
 using System.Windows.Forms;
 
-
 namespace RandomGame
 {
-    public partial class Form2 : Form
+    public partial class Form3 : Form
     {
-        public string value;
-
-        public Form2(string value)
+        public Form3(ListBox.SelectedObjectCollection selectedCollection, ComboBox.ObjectCollection comboBoxCollection, string selectedItem)
         {
             InitializeComponent();
-            textBox1.Text = value;
+            foreach (object item in selectedCollection)
+            {
+                if (textBox1.Text == "")
+                {
+                    textBox1.AppendText(item.ToString());
+                    continue;
+                }
+                textBox1.AppendText("\r\n" + item.ToString());
+            }
+            
+            foreach (object item in comboBoxCollection)
+            {
+                if (item.ToString() == selectedItem)
+                    continue;
+                comboBox1.Items.Add(item.ToString());
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text.Trim(' ') == "")
+            if (comboBox1.SelectedItem == null)
             {
-                MessageBox.Show("Новое значение не может быть пустым", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Для перемещения необходимо выбрать категорию.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -27,9 +39,9 @@ namespace RandomGame
             }
         }
 
-        public string NewValue()
+        public string NewCategory()
         {
-            return textBox1.Text.Trim(' ');
+            return comboBox1.SelectedItem.ToString();
         }
 
         private void button2_Click(object sender, EventArgs e)

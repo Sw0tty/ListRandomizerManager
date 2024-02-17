@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ClosedXML.Excel;
-using System.Runtime.InteropServices.ComTypes;
-using DocumentFormat.OpenXml.Spreadsheet;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.Threading;
-using DocumentFormat.OpenXml.Drawing;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+
 
 namespace RandomGame
 {
@@ -29,22 +20,11 @@ namespace RandomGame
             LoadJson();
 
             string lastSelectedCategory = Properties.Settings.Default.lastSelectedCategory;
-            //Dictionary<string, List<string>> d = Properties.Settings.Default.dictionaryValues;
 
             if (lastSelectedCategory != "")
             {
                 comboBox1.SelectedItem = lastSelectedCategory;
             }
-
-            //MessageBox.Show(collection.Count.ToString());
-
-            //MessageBox.Show(d.Count.ToString());
-
-            //comboBox1.SelectedItem = "films";
-
-
-            //MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory);
-
 
             if (comboBox1.SelectedItem != null)
             {
@@ -102,6 +82,7 @@ namespace RandomGame
 
                         JSONWorker.AddValue(comboBox1.SelectedItem.ToString(), newValueInCategory);
                         CheckCountList();
+                        valueBox.Text = "";
                     }
                 }
                 else
@@ -117,18 +98,32 @@ namespace RandomGame
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItems.Count != 0)
+            if (MessageBox.Show("Вы действительно хотите удалить выбранные записи?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                object selectedValue = listBox1.SelectedItem;
-                JSONWorker.DeleteValue(comboBox1.SelectedItem.ToString(), selectedValue.ToString());
-                listBox1.Items.Remove(selectedValue);
-                button3.Enabled = false;
-                //saveListBox();
-                CheckCountList();
-            }
-            else
-            {
-                MessageBox.Show("Ничего не выбрано", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (listBox1.SelectedItems.Count > 1)
+                {
+                    List<object> selectedItems = new List<object>();
+
+                    foreach (object item in listBox1.SelectedItems)
+                    {
+                        selectedItems.Add(item);
+                    }
+                    foreach (object item in selectedItems)
+                    {
+                        JSONWorker.DeleteValue(comboBox1.SelectedItem.ToString(), item.ToString());
+                        listBox1.Items.Remove(item);
+                        button3.Enabled = false;
+                        CheckCountList();
+                    }
+                }
+                else
+                {
+                    object selectedValue = listBox1.SelectedItem;
+                    JSONWorker.DeleteValue(comboBox1.SelectedItem.ToString(), selectedValue.ToString());
+                    listBox1.Items.Remove(selectedValue);
+                    button3.Enabled = false;
+                    CheckCountList();
+                }
             }
         }
 
@@ -250,6 +245,7 @@ namespace RandomGame
                     //comboBox1.Items.Add(newCategory);
                     
                     JSONWorker.AddCategory(listBox1, comboBox1, newCategory);
+                    textBox2.Text = "";
                 }
             }
         }
@@ -290,7 +286,6 @@ namespace RandomGame
                         }
                         JSONWorker.DataFromFile = newDict;
                     }
-
                 }
             }
             else
@@ -303,6 +298,7 @@ namespace RandomGame
         {
             button3.Enabled = false;
             button9.Enabled = false;
+            button10.Enabled = false;
             button8.Enabled = true;
             JSONWorker.LoadCategoryData(listBox1, comboBox1);
             CheckCountList();
@@ -328,8 +324,16 @@ namespace RandomGame
 
         private void listBox1_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (listBox1.SelectedItems.Count == 1)
+            {
+                button9.Enabled = true;
+            }
+            else
+            {
+                button9.Enabled = false;
+            }
             button3.Enabled = true;
-            button9.Enabled = true;
+            button10.Enabled = true;
         }
 
         public string SelectedItem()
@@ -345,8 +349,158 @@ namespace RandomGame
                 string newValue = settingsForm.NewValue();
                 JSONWorker.UpdateValue(comboBox1.SelectedItem.ToString(), listBox1.SelectedItem.ToString(), newValue);
                 listBox1.Items[listBox1.SelectedIndex] = newValue;
+                JSONWorker.SaveCollectionFile();
             }
-            
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Form2 settingsForm = new Form2(comboBox1.SelectedItem.ToString());
+            if (settingsForm.ShowDialog() == DialogResult.OK)
+            {
+                string newCategoryName = settingsForm.NewValue();
+                string oldCategoryName = comboBox1.SelectedItem.ToString();
+                comboBox1.Items.Remove(oldCategoryName);
+                comboBox1.Items.Add(newCategoryName);
+                JSONWorker.UpdateCategory(oldCategoryName, newCategoryName);
+                comboBox1.SelectedItem = newCategoryName;
+                JSONWorker.SaveCollectionFile();
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Form3 settingsForm = new Form3(listBox1.SelectedItems, comboBox1.Items, comboBox1.SelectedItem.ToString());
+            if (settingsForm.ShowDialog() == DialogResult.OK)
+            {
+                string newCategory = settingsForm.NewCategory();
+                List<string> valuesInNewCategory = JSONWorker.ReturnCategoryValues(newCategory);
+                List<string> problemValues = new List<string>();
+
+                foreach (string value in listBox1.SelectedItems)
+                {
+                    if (valuesInNewCategory.Contains(value))
+                        problemValues.Add(value);
+                }
+
+                if (problemValues.Count > 0)
+                {
+                    MessageBox.Show($"В конечной категории уже присутствуют значения: {string.Join(", ", problemValues)}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    List<string> selectedItems = new List<string>(listBox1.SelectedItems.Cast<string>().ToList());
+                    foreach (string value in selectedItems)
+                    {
+                        JSONWorker.AddValue(newCategory, value);
+                        JSONWorker.DeleteValue(comboBox1.SelectedItem.ToString(), value);
+                        listBox1.Items.Remove(value);
+                    }
+                    button3.Enabled = false;
+                    button10.Enabled = false;
+                    CheckCountList();
+                }
+            }
+        }
+
+        private void button1_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button2_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button3_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button3_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button4_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button4_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button5_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button5_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button6_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button6_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button7_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button7_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button8_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button8_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button9_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button9_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button10_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button10_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
         }
     }
 }

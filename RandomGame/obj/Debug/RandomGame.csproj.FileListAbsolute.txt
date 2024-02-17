@@ -105,3 +105,4 @@ C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.csproj.CopyCo
 C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.exe
 C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.pdb
 D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form2.resources
+D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form3.resources

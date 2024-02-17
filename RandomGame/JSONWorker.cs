@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Windows.Forms;
 using System.IO;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace RandomGame
 {
@@ -53,6 +54,11 @@ namespace RandomGame
             }
         }
 
+        public static List<string> ReturnCategoryValues(string category)
+        {
+            return DataFromFile[category].Cast<string>().ToList();
+        }
+
         public static void AddCategory(ListBox listBox, ComboBox comboBox, string newCategory)
         {
             listBox.Items.Clear();
@@ -76,6 +82,13 @@ namespace RandomGame
                     break;
                 }
             }
+        }
+
+        public static void UpdateCategory(string oldNameCategory, string newNameCategory)
+        {
+            List<string> categoryData = new List<string>(DataFromFile[oldNameCategory]);
+            DataFromFile.Remove(oldNameCategory);
+            DataFromFile.Add(newNameCategory, categoryData);
         }
 
         public static void DeleteValue(string category, string value)
