@@ -28,7 +28,13 @@ namespace RandomGame
 
             if (comboBox1.SelectedItem != null)
             {
+                button7.Enabled = true;
                 button8.Enabled = true;
+            }
+
+            if (comboBox1.SelectedValue == null)
+            {
+                groupBox1.Enabled = false;
             }
         }
 
@@ -138,28 +144,35 @@ namespace RandomGame
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var wb = new XLWorkbook();
-
-            foreach (string category in JSONWorker.DataFromFile.Keys)
+            Form4 settingsForm = new Form4(comboBox1.Items);
+            if (settingsForm.ShowDialog() == DialogResult.OK)
             {
-                var ws = wb.Worksheets.Add(category);
-                int valueCaount = 0;
+                var wb = new XLWorkbook();
 
-                foreach (string value in JSONWorker.DataFromFile[category])
+                foreach (string category in settingsForm.CheckedValues())
                 {
-                    ws.Cell($"A{valueCaount + 1}").Value = value;
-                    valueCaount++;
+                    var ws = wb.Worksheets.Add(category);
+                    int valueCaount = 0;
+
+                    foreach (string value in JSONWorker.DataFromFile[category])
+                    {
+                        ws.Cell($"A{valueCaount + 1}").Value = value;
+                        valueCaount++;
+                    }
+                    ws.Columns().AdjustToContents();
                 }
-                ws.Columns().AdjustToContents();  
+
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                DialogResult result = dialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                {
+                    wb.SaveAs($"{dialog.SelectedPath}\\CollectionValue.xlsx");
+                }
             }
 
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            DialogResult result = dialog.ShowDialog();
 
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
-            {
-                wb.SaveAs($"{dialog.SelectedPath}\\CollectionValue.xlsx");
-            }
+            
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -258,6 +271,8 @@ namespace RandomGame
                 comboBox1.Items.Remove(comboBox1.SelectedItem);
                 listBox1.Items.Clear();
                 button8.Enabled = false;
+                button7.Enabled = false;
+                groupBox1.Enabled = false;
                 CheckCountList();
             }
         }
@@ -296,10 +311,16 @@ namespace RandomGame
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (comboBox1.SelectedItem == null)
+                groupBox1.Enabled = false;
+            else
+                groupBox1.Enabled = true;
+
             button3.Enabled = false;
             button9.Enabled = false;
             button10.Enabled = false;
             button8.Enabled = true;
+            button7.Enabled = true;
             JSONWorker.LoadCategoryData(listBox1, comboBox1);
             CheckCountList();
         }
