@@ -30,11 +30,7 @@ namespace RandomGame
             {
                 button7.Enabled = true;
                 button8.Enabled = true;
-            }
-
-            if (comboBox1.SelectedValue == null)
-            {
-                groupBox1.Enabled = false;
+                groupBox1.Enabled = true;
             }
         }
 
@@ -169,10 +165,7 @@ namespace RandomGame
                 {
                     wb.SaveAs($"{dialog.SelectedPath}\\CollectionValue.xlsx");
                 }
-            }
-
-
-            
+            }   
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -255,8 +248,6 @@ namespace RandomGame
                 }
                 else
                 {
-                    //comboBox1.Items.Add(newCategory);
-                    
                     JSONWorker.AddCategory(listBox1, comboBox1, newCategory);
                     textBox2.Text = "";
                 }

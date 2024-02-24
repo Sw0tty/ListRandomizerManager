@@ -218,7 +218,7 @@
             this.groupBox1.Size = new System.Drawing.Size(265, 99);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Добавления значения к категории";
+            this.groupBox1.Text = "Добавление значения к категории";
             // 
             // groupBox2
             // 

@@ -60,7 +60,6 @@ D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.csproj.Co
 D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.exe
 D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.pdb
 D:\SharpProjects\ListRandomizerManager\RandomGame\bin\Debug\System.Collections.Immutable.dll
-D:\SharpProjects\ListRandomizerManager\RandomGame\bin\Debug\System.Text.Json.dll
 D:\SharpProjects\ListRandomizerManager\RandomGame\bin\Debug\System.ValueTuple.dll
 D:\SharpProjects\ListRandomizerManager\RandomGame\bin\Debug\System.Text.Encodings.Web.dll
 D:\SharpProjects\ListRandomizerManager\RandomGame\bin\Debug\System.Threading.Tasks.Extensions.dll
@@ -109,3 +108,4 @@ D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form3.res
 C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form2.resources
 C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form3.resources
 C:\CharpProj\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form4.resources
+D:\SharpProjects\ListRandomizerManager\RandomGame\obj\Debug\RandomGame.Form4.resources

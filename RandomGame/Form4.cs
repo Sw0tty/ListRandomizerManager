@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace RandomGame
 {
@@ -31,7 +28,7 @@ namespace RandomGame
         {
             if (checkedListBox1.CheckedItems.Count == 0)
             {
-                MessageBox.Show("Не был выбран ни одная категория для выгрузки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не была выбрана ни одна категория для выгрузки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -44,6 +41,26 @@ namespace RandomGame
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void button1_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button1_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
+        }
+
+        private void button2_MouseEnter(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            Cursor = Cursors.Default;
         }
     }
 }
